@@ -18,7 +18,7 @@
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="icon" href="./static/images/favicon.png">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -160,8 +160,8 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
+      <video id="teaser" autoplay muted loop playsinline width="70%" style="display: block; margin: 0 auto;">
+        <source src="./static/videos/swaying.mp4"
                 type="video/mp4">
       </video>
       <h2 class="subtitle has-text-centered">
@@ -248,123 +248,138 @@
     <!-- Paper video. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
+        <!--<h2 class="title is-3">Demo Videos</h2>-->
         <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <video id="teaser" autoplay muted loop playsinline height="100%">
+            <source src="./static/videos/concat.mp4"
+                    type="video/mp4">
+          </video>
         </div>
+          <p>
+            This visualization begins with dense TAPIR tracks.  We segment the scene into foreground
+            and background, remove background points, and compensate for camera motion to reveal how
+            the objects move through the scene.
+          </p>
       </div>
     </div>
     <!--/ Paper video. -->
+    <div class="columns is-centered">
+
+      <!-- Colab. -->
+      <div class="column is-four-fifths">
+        <div class="content">
+          <h2 class="title is-3">Colab Demo</h2>
+          <p>
+          TAPIR is open-source.  We provide a <a href="">colab</a> where you can try TAPIR on your own videos using Google hardware.  Have fun!
+          </p>
+        </div>
+      </div>
+    </div>
+ 
   </div>
-</section>
 
 
-<section class="section">
   <div class="container is-max-desktop">
 
     <div class="columns is-centered">
 
-      <!-- Visual Effects. -->
-      <div class="column">
+      <!-- Arch. -->
+      <div class="column is-four-fifths">
         <div class="content">
-          <h2 class="title is-3">Visual Effects</h2>
+          <h2 class="title is-3">Architecture</h2>
           <p>
-            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
-            would be impossible without nerfies since it would require going through a wall.
+            TAPIR begins with our prior work, <a href="https://github.com/deepmind/tapnet">TAP-Net</a> to initialize a trajectory given a query point, and then uses an architecture inspired by <a href="https://particle-video-revisited.github.io/">Persistent Independent Particles</a> (PIPs) to refine the initial estimate.
           </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Visual Effects. -->
+          <img src="./static/images/tapir_figure_simplified.png"
+                 class="interpolation-image"
+                 alt="TAPIR architecture."/>
 
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3">Matting</h2>
-        <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              As a byproduct of our method, we can also solve the matting problem by ignoring
-              samples that fall outside of a bounding box during rendering.
-            </p>
-            <video id="matting-video" controls playsinline height="100%">
-              <source src="./static/videos/matting.mp4"
-                      type="video/mp4">
-            </video>
-          </div>
-
+          <p>
+            TAP-Net lets us replace the &ldquo;Chaining&rdquo;, which was the slowest part of PIPs.  We furthermore replace the MLP-Mixer with a fully-convolutional network, which allows us to remove complex chunking procedures while improving performance.  Finally, the model estimates its own uncertainty regarding position, which improves performance and can also be useful in domains like 3D reconstruction, where confident errors can break downstream algorithms.
+          </p>
         </div>
       </div>
     </div>
-    <!--/ Matting. -->
-
-    <!-- Animation. -->
     <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Animation</h2>
 
-        <!-- Interpolating. -->
-        <h3 class="title is-4">Interpolating states</h3>
-        <div class="content has-text-justified">
+      <!-- Results. -->
+      <div class="column is-four-fifths">
+        <div class="content">
+          <h2 class="title is-3">TAP-Vid Performance</h2>
           <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
+            The <a href="https://github.com/deepmind/tapnet">TAP-Vid benchmark</a> is a set of real and synthetic videos annotated with point tracks.  The metric, Average Jaccard, measures both accuracy in estimating position and occlusion.  Higher is better.
           </p>
-        </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
+          <table>
+            <tr>
+              <th><p style="text-align:left">Method</p></th>
+              <th><p style="text-align:center">Kinetics</p></th>
+              <th><p style="text-align:center">DAVIS</p></th>
+              <th><p style="text-align:center">Kubric</p></th>
+              <th><p style="text-align:center">RGB-Stacking</p></th>
+            </tr>
+            <tr>
+              <td style="border-bottom: none;"><p style="text-align:left">TAP-Net</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center">46.6</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center">38.4</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center">65.4</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center">59.9</p></td>
+            </tr>
+            <tr>
+              <td style="border-bottom: none;"><p style="text-align:left">PIPs</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center">35.3</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center">42.0</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center">59.1</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center">37.3</p></td>
+            </tr>
+            <tr>
+              <td style="border-bottom: none;"><p style="text-align:left">TAPIR</p></td>
+              <td style="border-bottom: none;"><p style="text-align:center"><b>60.2</b></p></td>
+              <td style="border-bottom: none;"><p style="text-align:center"><b>62.9</b></p></td>
+              <td style="border-bottom: none;"><p style="text-align:center"><b>88.3</b></p></td>
+              <td style="border-bottom: none;"><p style="text-align:center"><b>73.3</b></p></td>
+            </tr>
+ 
+          </table>
+          <p>
+          You can see that TAPIR provides a substantial boost in performance, roughly 20% absolute performance over prior methods.  To get a sense of how much this is, here's a few examples of our improvements over prior work on the DAVIS dataset
+          <!--if the occlusion predictions are all correct, then 20% corresponds to roughly halving the localization error (in terms of distance between the ground truth and predicted positions) of <i>all</i> predictions.-->
+          </p>
+          <div class="container">
+            <div id="results-carousel" class="carousel results-carousel">
+              <div class="item">
+                <video poster="" id="camel" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/camel.mp4"
+                          type="video/mp4">
+                </video>
+              </div>
+              <div class="item">
+                <video poster="" id="bmx-trees" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/bmx-trees.mp4"
+                          type="video/mp4">
+                </video>
+              </div>
+              <div class="item">
+                <video poster="" id="india" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/india.mp4"
+                          type="video/mp4">
+                </video>
+              </div>
+              <div class="item">
+                <video poster="" id=car-shadow"" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/car-shadow.mp4"
+                          type="video/mp4">
+                </video>
+              </div>
             </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
           </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        <br/>
-        <!--/ Interpolating. -->
 
-        <!-- Re-rendering. -->
-        <h3 class="title is-4">Re-rendering the input video</h3>
-        <div class="content has-text-justified">
-          <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <!--/ Re-rendering. -->
 
+        </div>
       </div>
-    </div>
-    <!--/ Animation. -->
 
+    </div>
+
+    <!--/ Matting. -->
 
     <!-- Concurrent Work. -->
     <div class="columns is-centered">
@@ -373,25 +388,21 @@
 
         <div class="content has-text-justified">
           <p>
-            There's a lot of excellent work that was introduced around the same time as ours.
+            Point tracking is a new field with a few notable works released around the same time as ours.
           </p>
           <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
+            <a href="https://particle-video-revisited.github.io/">Persistent Independent Particles</a> was an inspiration for this work, and we'd like to thank Adam Harley for insightful discusisons.
           </p>
           <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
+            <a href="https://omnimotion.github.io/">Tracking Everything Everywhere All At Once</a> doesn't perform as well as TAPIR and is substantially slower, but it provides pseudo-3D reconstructions, and could potentially be used on top of TAPIR tracks to further improve performance.
           </p>
           <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
-          </p>
-          <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
+            <a href="https://arxiv.org/abs/2305.12998">Multi-Flow Tracking</a> hypothesizes many flow fields between different pairs of frames and scores them; multiple hypotheses leads to improved robustness.
           </p>
         </div>
       </div>
     </div>
-    <!--/ Concurrent Work. -->
+    <!-- Concurrent Work. -->
 
   </div>
 </section>
@@ -431,10 +442,8 @@
           </p>
           <p>
             This means you are free to borrow the <a
-              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
-            we just ask that you link back to this page in the footer.
-            Please remember to remove the analytics code included in the header of the website which
-            you do not want on your website.
+              href="https://github.com/deepmind-tapir/deepmind-tapir.github.io">source code</a> of this website, which itelf is a fork of <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+            We just ask that you link back to this page in the footer.
           </p>
         </div>
       </div>
