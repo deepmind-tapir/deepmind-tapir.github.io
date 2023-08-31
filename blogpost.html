@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="TAPIR provides fast and accurate tracking of any point in a video">
+  <meta name="keywords" content="TAPIR Tracking Any Point">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TAPIR Blog Post: Towards Spatial Intelligence via Point Tracking</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body onload="set_source(0);set_source2(0);">
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://deepmind.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://tapvid.github.io">
+            TAP-Vid Dataset
+          </a>
+          <a class="navbar-item" href="https://deepmind-tapir.github.io">
+            TAPIR
+          </a>
+          <a class="navbar-item" href="https://robotap.github.io">
+            RoboTAP
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h2 class="title is-2 publication-title">TAPIR: Towards Spatial Intelligence via Point Tracking</h2>
+          <!--<p style="font-size:.85em; color:#555555">Written by Carl Doersch, Sept 1 2023.</p>-->
+<!--          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="http://www.carldoersch.com">Carl Doersch</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://yangyi02.github.io">Yi Yang</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=Jvi_XPAAAAAJ">Mel Vecerik</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=cnbENAEAAAAJ">Dilara Gokay</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ankushgupta.org">Ankush Gupta</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://people.csail.mit.edu/yusuf/">Yusuf Aytar</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=IUZ-7_cAAAAJ">Joao Carreira</a><sup>1</sup>
+            </span>
+            <span class="author-block">
+              <a href="https://www.robots.ox.ac.uk/~az/">Andrew Zisserman</a><sup>1,2</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Google DeepMind,</span>
+            <span class="author-block"><sup>2</sup>VGG, Department of Engineering Science, University of Oxford</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. 
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2306.08637"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2306.08637"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/deepmind/tapnet"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>-->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero">
+  <div class="container is-max-desktop">
+    <!-- -->
+    <div class="is-centered">
+      <p>
+        Although AI systems have shown remarkable progress in text-related tasks (question answering, conversations, etc.), in <i>spatial</i> reasoning, progress has been slow.  For humans, spatial reasoning is so natural that it’s almost invisible.  We can assemble furniture from pictorial instructions, arrange odd-shaped objects into a backpack before an overnight trip, and decide if an elderly person needs help crossing uneven terrain by watching them.  For computers, these problems are all far out of reach.  
+        <br/><br/>
+        Why is this problem so hard? One big difference between text-based tasks and spatial tasks is the data: the web has billions of examples of human conversations, including the exact words that a computer system would need to emit in order to continue a given conversation.  However, people wouldn't describe exactly how to grasp a chair leg during assembly, at least not at level of precision that would let a robot to perform the same grasp. Robots can't learn to assemble furniture simply by reading about it.
+        <br/><br/>
+Instead, we might expect that robots could learn by watching videos.  After all, there are many videos online of furniture assembly, and people easily understand what's happening in the 3D physical world by watching them.  This ability is remarkable if you think about it: from a 2D screen, people can infer how the parts move all the way from the box to the final assembly, and all the ways people grasp, turn, push, and pull along the way.  Current computer systems are far from this.  In fact, they have a hard time even tracking the parts from the box to the assembly, much less the forces that make them move as they do.
+        <br/><br/>
+        To this end, we have introduced a new task in computer vision called TAP: Tracking Any Point. Given a video and a set of <i>query points</i>, i.e., 2D locations on any frame of the video, the algorithm outputs the location that those points correspond to on every other frame of the video.
+
+        <br/><br/>
+      </p>
+    </div>
+    
+    <div class="hero">
+      <table><tr>
+        <td>
+          <p style="text-align:center"><b>Input 1</b></p>
+          <video id="teaser" autoplay muted loop playsinline width="100%" style="display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/swaying_crop.mp4"
+                    type="video/mp4">
+          </video>
+        </td>
+        <td style="vertical-align:middle;">
+          <img src="./static/images/arrow.svg" style="width:224px;padding:20px"/>
+        </td>
+        <td>
+          <p style="text-align:center"><b>Input 2</b></p>
+          <img src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/swaying_pts_fr0.png"/>
+        </td>
+        <td style="vertical-align:middle;">
+          <img src="./static/images/arrow.svg" style="width:224px;padding:20px"/>
+        </td>
+
+        <td>
+          <p style="text-align:center"><b>Output</b></p>
+          <video id="teaser" autoplay muted loop playsinline width="100%" style="display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/swaying.mp4"
+                    type="video/mp4">
+          </video>
+        </td>
+      </tr></table>
+    </div>
+    <div class="is-centered" style="margin-top:15px;margin-bottom:15px;">
+      <p>
+
+      On the dress above, the output came from our recent algorithm called <a href="https://deepmind-tapir.github.io/">TAPIR</a>, which we have released open-source.  The output reveals how the dress accelerates and changes shape over time, which reveals information about the underlying geometry and physics.  TAPIR is fast and works well across a huge variety of real scenes.  Below, we show a few more examples of the results it can achieve on real scenes.
+      </p>
+    </div>
+
+    <div class="is-centered">
+          <video id="teaser" autoplay muted loop playsinline style="width:70%;display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/concat.mp4"
+                    type="video/mp4">
+          </video>
+    </div> 
+
+
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+         <h2 class="is-size-4 has-text-weight-semibold" style="margin-top:20px">Robotics</h2>
+         So what can we use such a system for?  One answer is robotics.  Today we’re announcing a system for robotic manipulation that uses TAPIR as its foundation (called RoboTAP).  Here’s RoboTAP solving a gluing task without human intervention.
+      </p>
+    </div>
+
+    <div class="is-centered">
+          <video id="teaser" autoplay muted loop playsinline style="width:70%;display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/gluing.mp4"
+                    type="video/mp4">
+          </video>
+    </div> 
+ 
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+      What’s even more remarkable, however, is that the model learned to do this from just five demonstrations (compare to the hundreds or thousands of demonstrations required by recent works like DeepMind’s <a href=”https://arxiv.org/abs/2306.11706”>RoboCAT</a>).  Furthermore, outside of these five demonstrations, the system has never even seen glue sticks, wooden blocks like these, or even the gear that it’s supposed to place the final assembly next to.  It works because TAPIR can track any object, even objects that were never seen until the demonstrations, and the system simply imitates the <i>motions</i> revealed in the tracks.
+
+        <br/><br/>
+        Here’s how it works in a bit more detail. For this example the goal is to insert four objects into a stencil, given five demonstrations (with different scene configurations) where a human drives the robot to accomplish the task.  We first track thousands of points using TAPIR.  Next, we group points into clusters based on the similarity of the motion, using an algorithm which we have made public on <a href=”TODO”>GitHub</a>.  Below, we show the results for one video, where the colors indicate the object that each point has been assigned to.
+
+      </p>
+    </div>
+    <div class="is-centered">
+          <video id="teaser" autoplay muted loop playsinline style="width:60%;display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/clustering_v2.mp4"
+                    type="video/mp4">
+          </video>
+    </div> 
+ 
+
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+      Next we have to figure out which objects are relevant for each motion. To achieve this we exploit a natural property of goal-directed motion: that regardless of where objects start relative to the robot, at the end of a motion they tend to be at a specific place (i.e. the goal location). For example, perhaps in all demonstrations, we note that the robot first always lines up to grasp the pink cylinder, and as a second step, it always lines up with a particular spot on the stencil cutout, and so on.  Below, we show the full set of objects that it discovers from the six demonstrations; at every moment, we show the points that the model believes are relevant at that particular stage of the motion.
+      <!--Next, we identify which object is important for each phase of the action by finding moments across the demonstrations where all objects of a particular type are in a consistent location relative to the robot gripper (for example, the algorithm discovers that the gripper first moves until it can grasp the pink cylinder, and then afterward the gripper moves to the stencil).  Below, we show the full set of objects that it discovers from the six demonstrations; at every moment, we show the points that the model believes are relevant at that particular stage of the motion.-->
+      </p>
+    </div>
+    <div class="is-centered">
+          <video id="teaser" autoplay muted loop playsinline style="width:100%;display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/robot_active_points.mp4"
+                    type="video/mp4">
+          </video>
+    </div> 
+ 
+
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+        With these objects discovered, it’s time to run the robot.  At every moment, the system knows which points are relevant based on the procedure above, regardless of where they are.  It detects these points using TAPIR and then moves the gripper so that the motion of those points matches what was seen in the demonstration.
+      </p>
+    </div>
+    <div class="is-centered">
+      <img src="./static/images/legend.png"/>
+          <video id="teaser" autoplay muted loop playsinline style="width:100%;display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/all_vis.mp4"
+                    type="video/mp4">
+          </video>
+    </div>
+ 
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+        Despite its simplicity, this system can solve a wide variety of tasks from a very small number of demonstrations.  It works whether objects are rigid or not, and it even works when irrelevant objects are placed into the scene, something that prior learning-based robotic systems have struggled with.  
+      </p>
+    </div>
+      <div class="is-centered" style="border-bottom: 1px solid darkgray; border-top: 1px solid darkgray; margin-bottom:15px; padding-top:10px">
+        <div class="is-four-fifths">
+          <!--<h2 class="title is-3">Example RoboTAP Tasks</h2>
+          <div class="has-text-justified">
+            <p>
+              Here we show the example tasks that we tackled with RoboTAP. For each task, the system only saw 4-6 demonstrations of the behavior; outside of these demonstrations, the relevant objects have never been seen before.  Click the icons on the bottom to see different examples of the robot at work.
+            </p>
+            <div/>-->
+          <div style="margin:auto">
+            <table style="width:1024;padding-bottom:0px" cellpadding="0" cellspacing="0">
+              <tr height="50%">
+                <td style="padding-left:4px;padding-right:4px;" width="50%">
+                  <div style="display:inline;">
+                    <video id="success_vid0" width="512" height="288" autoplay loop muted>
+                      <source src="" type="video/mp4" />
+                    </video>
+                  </div>
+                </td>
+                <td style="padding-left:4px;padding-right:4px;" width="50%">
+                  <div style="display:inline;">
+                    <video id="success_vid1" width="512" height="288" autoplay loop muted>
+                      <source src="" type="video/mp4" />
+                    </video>
+                  </div>
+                </td>
+              </tr>
+              <tr height="50%">
+                <td style="padding-left:4px;padding-right:4px;" width="50%">
+                  <div style="display:inline;">
+                    <video id="success_vid2" width="512" height="288" autoplay loop muted>
+                      <source src="" type="video/mp4" />
+                    </video>
+                  </div>
+                </td>
+                <td style="padding-left:20px;padding-right:20px;text-align: center; vertical-align: middle;" width="50%">
+                  <p width="512" height="288" id="success_text">Javascript required.</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <h3 style="border-top: 1px solid darkgray;">Select a task for more information.</h3>
+          <div class="has-text-centered">
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/gluing_11_thumb.png"
+                  width="100" onclick="set_source2(0);"/>
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/apple_on_jello_1_thumb.png"
+                  width="100" onclick="set_source2(1);"/>
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/juggling_stack_20_thumb.png"
+                  width="100" onclick="set_source2(2);"/>
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/four_block_stencil_w2_39_thumb.png"
+                  width="100" onclick="set_source2(3);"/>
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/lego_stack_w3_2_thumb.png"
+                  width="100" onclick="set_source2(4);"/>
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/tapir_robot_v2_4_thumb.png"
+                  width="100" onclick="set_source2(5);"/>
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/four_block_stack_1_thumb.png"
+                  width="100" onclick="set_source2(6);"/>
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/pass_butter_1_thumb.png"
+                  width="100" onclick="set_source2(7);"/>
+              <img style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/robotap/videos/success_gallery/precision_1_thumb.png"
+                  width="100" onclick="set_source2(8);"/>
+          </div>
+        </div>
+      </div>
+      <!--</div>-->
+
+
+
+    <div class="is-centered">
+      <p>
+        <h2 class="is-size-4 has-text-weight-semibold" style="margin-top:20px">Dynamic 3D Reconstrution</h2>
+        Robotics isn’t the only domain that we’re interested in.  Another exciting direction is building 3D models of individual scenes.  Such 3D models could one day enable better augmented reality systems (especially when combined with tracking), or even allow users to create full 3D simulations starting with a single video.  Recently, a team from Google Research collaborating with Cornell has published an algorithm called <a href=”https://omnimotion.github.io/”>OmniMotion</a> which can approximately reconstruct entire videos in 3D using point tracks.  As a concurrent work, the paper relied on earlier, less-performant algorithms, but here we show a first example of OmniMotion running on top of TAPIR.  For each video, the left shows the original video, and the right shows the depth map, where blue indicates closer and red/orange indicates further away:
+      </p>
+    </div>
+    <div class="is-centered">
+          <video id="teaser" autoplay muted loop playsinline style="width:100%;display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/lab-coat_concat.mp4"
+                    type="video/mp4">
+          </video>
+    </div>
+ 
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+      Also in this direction, Inria and Adobe Research recently published <a href="https://em-yu.github.io/research/videodoodles/">VideoDoodles</a>, a very fun project which allows users to add annotations and animations to videos, which follow the objects and backgrounds as if they share the same 3D space.  Under the hood, it's powered by a point tracking algorithm that was developed with the help of our TAP-Vid dataset (though, as an independent project, it doesn't use TAPIR, at least not yet).
+      <br/><br/>
+
+      <h2  class="is-size-4 has-text-weight-semibold" style="margin-top:20px">Video Generation</h2>
+
+      A final application we’re interested in is video generation.  Although modern image generation models have improved dramatically in the last few years, video generation models still produce videos where objects tend to move in non-physical ways: they flicker in and out of existence, and the textures don’t stay in place as the objects move.  We hypothesize that training video generation systems using point tracks can greatly reduce this kind of artifact: the generative model can directly check whether the motion is plausible, and can also check that two image patches representing the same point on the same surface depict the same texture.  As a proof-of-concept, we’ve built a generative model that’s designed to animate still images.  It’s a two-step procedure: given an image, the model first generates a set of <i>trajectories</i> that describe how the object might move over time.  Then for the second step, the model warps the input image according to the trajectories, and then attempts to fill in holes.  Both stages use diffusion to generate both trajectories and pixels.
+        <br/><br/>
+        In the visualization below, we start with a single example, and generate two <i>different</i> plausible animations from it, demonstrating that our model can understands that a single image is ambiguous.   The first column shows the input image. The second column shows a visualization of the trajectories themselves on top of the input image: purples show tracks with little motion, whereas yellows show the tracks with the most motion. The third column animates the original image according to the trajectories using standard image warping. The fourth column shows the result after filling the holes with another diffusion model, where the holes in the warped version have been filled in with our second diffusion model. Note that the hole filling wasn't the focus of our work; thus, unlike most concurrent work on video generation, we don't do any pre-training on images, resulting in imperfect results. We encourage you to consider whether the trajectories themselves are reasonable predictions of the future.
+        You can use the gallery at the bottom to navigate between examples.
+      </p>
+    </div>
+    <div class="is-centered" style="border-bottom: 1px solid darkgray; border-top: 1px solid darkgray; margin-top:10px;">
+            <div style="margin:auto">
+	      <table style="width:1024;padding-bottom:0px" cellpadding="0" cellspacing="0"><tr>
+                  <td style="width:224;text-align:center;padding-bottom:0"><h4 style="margin-bottom:0px">&nbsp;<br/>Input: single image</h4></td>
+                              <td style="width:224;text-align:center;padding-bottom:0"><h4 style="margin-bottom:0px">Trajectories computed <br/> from single image</h4></td>
+                              <td style="width:224;text-align:center;padding-bottom:0"><h4 style="margin-bottom:0px">Input image warped <br/> using trajectories</h4></td>
+                              <td style="width:224;text-align:center;padding-bottom:0"><h4 style="margin-bottom:0px">Animation result after hole <br/> filling</h4></td>
+	      </tr>
+              <tr>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;"><img id="input" src="" width="224" height="224"/></div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid0" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid1" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid2" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+              </tr>
+              <tr>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=" width="224" height="224"/></div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid3" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid4" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid5" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                </tr>
+              </table>
+            </div>
+
+            <p id="text">Javascript required.</p>
+            <br/>
+            <h3 style="border-bottom: 1px solid darkgray;">Gallery</h3>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_35.png" width="68" height="68" onclick="set_source(0);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_64.png" width="68" height="68" onclick="set_source(1);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_43.png" width="68" height="68" onclick="set_source(2);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_26.png" width="68" height="68" onclick="set_source(3);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_65.png" width="68" height="68" onclick="set_source(4);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_135.png" width="68" height="68" onclick="set_source(5);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/normal-cat.png" width="68" height="68" onclick="set_source(6);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/brown-bird.png" width="68" height="68" onclick="set_source(7);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_8.png" width="68" height="68" onclick="set_source(8);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_18.png" width="68" height="68" onclick="set_source(9);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_25.png" width="68" height="68" onclick="set_source(10);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_63.png" width="68" height="68" onclick="set_source(11);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/portrait.png" width="68" height="68" onclick="set_source(12);"/>
+        </div>
+
+
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+      <h2  class="is-size-4 has-text-weight-semibold" style="margin-top:20px">Point Tracking's Versatility</h2>
+        Hopefully we’ve convinced you that point tracking is useful.   However, you might still be wondering why we should track points, rather than entire objects the way so much prior work has done?  We argue that summarizing an entire object as a box (or segment) loses information about how the object rotates and deforms across time, which is important for understanding physical properties.  It’s also more objectively defined: if the task is to track a chair, but the seat comes off of the chair halfway through a video, should we track the seat or the frame?  For points on the chair’s surface, however, there is no ambiguity: after all, the surface of chair (and every other solid object) is made up of atoms, and those atoms persist over time.
+        <br/><br/>
+        Another reason that TAP is interesting is that people seem to track points. To demonstrate this, take a look at this image.
+      </p>
+    </div>
+    <div class="is-centered">
+          <img src="./static/images/brick_warp_frame.jpg" style="width:70%;display: block; margin: 0 auto;"/>
+    </div> 
+ 
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+        If you’re like most people, this looks like a regular brick wall.  However, it has, in fact, been digitally edited.  To see how it was edited, play the video below that the image came from.
+      </p>
+    </div>
+    <div class="is-centered">
+          <video id="teaser" muted controls loop playsinline style="width:70%;display: block; margin: 0 auto;">
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/brick_warp.mp4"
+                    type="video/mp4">
+          </video>
+    </div> 
+ 
+    <div class="is-centered">
+      <p style="margin-top:15px;margin-bottom:15px;">
+        The artificial motion is visible for less than a second, and yet to most people, the edit jumps out.  In fact, it typically looks like the bricks are sliding against one another, completely overriding the &rdquo;common knowledge&ldquo; that brick walls are solid.  This suggests that your brain is tracking essentially all points at all times; you only notice it when some motion doesn’t match your expectations.
+        <br/><br/>
+        TAP is a new field in computer vision, but it’s one that we believe can serve as a foundation for better physical understanding in AI systems.  If you’re curious to test it out, the TAPIR model code and weights are open source.  We’ve released a base model and also an online model  which can run in real time, which served as the basis for our robotics work.  There’s a colab notebook where you can try out TAPIR using Google’s GPUs, and also a live demo where you can run TAPIR in real time on the feed from your own webcam.  We hope you find it useful.
+      </p>
+      <p style="font-size:.85em;color:#666666;margin-top:15px;margin-bottom:15px;">
+      Page authored by Carl Doersch, with valuable input from the other TAPIR, RoboTAP, and TAP-Vid authors: Yi Yang, Mel Vecerik, Jon Scholz, Todor Davchev, Joao Carreira, Guangyao Zhou, Ankush Gupta, Yusuf Aytar, Dilara Gokay, Larisa Markeeva, Raia Hadsell, Lourdes Agapito.  We also thank Qianqian Wang for providing visuals of OmniMotion.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="https://arxiv.org/abs/2306.08637">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/deepmind/tapnet" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/deepmind-tapir/deepmind-tapir.github.io">source code</a> of this website, which itelf is a fork of <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+            We just ask that you link back to this page in the footer.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
