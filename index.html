@@ -26,7 +26,7 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 </head>
-<body>
+<body onload="set_source(0);">
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
@@ -194,7 +194,7 @@
         <h2 class="title is-3">Video Summary</h2>
         <div class="publication-video">
           <video id="summary" playsinline controls height="100%">
-            <source src="./static/videos/summary_video.mp4"
+            <source src="https://storage.googleapis.com/dm-tapnet/tapir_iccv_video2.mp4"
                     type="video/mp4">
           </video>
         </div>
@@ -311,23 +311,108 @@
               </div>
             </div>
           </div>
-
-
         </div>
       </div>
-
     </div>
+  </section>
+  <section class="hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <!-- Results. -->
+        <div class="column is-four-fifths">
+          <div class="">
+   
+            <h2 class="title is-3">Still Image Animation</h2>
+            <p>
+            One potential application of point tracking is to improve the temporal consistency and the physical plausibility of video generation.  In this proof-of-concept, we build a pipeline which can take a still image and produce a short animated clip.  This is a two-stage pipeline, where we first have a diffusion model which produces dense tracks given the input image, and a second stage which produces a video given the input image and the trajectories.  TAPIR produces training data for both stages from otherwise unlabeled videos.  See our paper for details. <br/><br/>
+            In the visualization below, we start with a single example, and generate two <i>different</i> animations from it, demonstrating that our model can understands that a single image is ambiguous.   The first column shows the input image. The second column shows a visualization of the trajectories themselves on top of the input image: purples show tracks with little motion, whereas yellows show the tracks with the most motion. The third column animates the original image according to the trajectories using standard image warping. The fourth column shows the result after filling the holes with the second diffusion model. Note that the hole filling wasn't the focus of our work; thus, unlike most concurrent work on video generation, we don't do any pre-training on images, resulting in imperfect results. We encourage you to consider whether the trajectories themselves are reasonable predictions of the future.<br/><br/>
+      You can use the gallery at the bottom to navigate between examples.
+            </p>
+          <div class="is-centered" style="border-bottom: 1px solid darkgray; border-top: 1px solid darkgray; margin-top:10px;">
+            <div style="margin:auto">
+	      <table style="width:1024;padding-bottom:0px" cellpadding="0" cellspacing="0"><tr>
+                  <td style="width:224;text-align:center;padding-bottom:0"><h4 style="margin-bottom:0px">&nbsp;<br/>Input: single image</h4></td>
+                              <td style="width:224;text-align:center;padding-bottom:0"><h4 style="margin-bottom:0px">Trajectories computed <br/> from single image</h4></td>
+                              <td style="width:224;text-align:center;padding-bottom:0"><h4 style="margin-bottom:0px">Input image warped <br/> using trajectories</h4></td>
+                              <td style="width:224;text-align:center;padding-bottom:0"><h4 style="margin-bottom:0px">Animation result after <br/> hole filling</h4></td>
+	      </tr>
+              <tr>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;"><img id="input" src="" width="224" height="224"/></div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid0" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid1" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid2" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+              </tr>
+              <tr>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=" width="224" height="224"/></div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid3" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid4" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                <td style="padding-left:4px;padding-right:4px;"><div style="display:inline;">
+                  <video id="vid5" width="224" height="224" autoplay loop muted>
+                    <source src="" type="video/mp4" />
+                  </video>
+                </div></td>
+                </tr>
+              </table>
+            </div>
 
-    <!--/ Matting. -->
+            <p id="text">Javascript required.</p>
+            <br/>
+            <h3 style="border-bottom: 1px solid darkgray;">Gallery</h3>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_35.png" width="54" height="54" onclick="set_source(0);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_64.png" width="54" height="54" onclick="set_source(1);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_43.png" width="54" height="54" onclick="set_source(2);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_26.png" width="54" height="54" onclick="set_source(3);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_65.png" width="54" height="54" onclick="set_source(4);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_135.png" width="54" height="54" onclick="set_source(5);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/normal-cat.png" width="54" height="54" onclick="set_source(6);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/brown-bird.png" width="54" height="54" onclick="set_source(7);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_8.png" width="54" height="54" onclick="set_source(8);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_18.png" width="54" height="54" onclick="set_source(9);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_25.png" width="54" height="54" onclick="set_source(10);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/image_63.png" width="54" height="54" onclick="set_source(11);"/>
+            <img id="input" style="margin-top:10px;cursor:pointer;" src="https://storage.googleapis.com/dm-tapnet/tapir-blogpost/videos/animation/portrait.png" width="54" height="54" onclick="set_source(12);"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <section class="hero">
+    <div class="container is-max-desktop">
+
 
     <!-- Concurrent Work. -->
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">Related Links</h2>
+        <h2 class="title is-3" style="margin-top: 20px">Related Links</h2>
 
         <div class="content has-text-justified">
           <p>
             Point tracking is a new field with a few notable works released around the same time as ours.
+          </p>
+          <p>
+            <a href="https://robotap.github.io/">RoboTAP</a> is a DeepMind work applies point tracking for robotics, specifically extremely low-shot imitation of complex robot behaviors from video.
           </p>
           <p>
             <a href="https://particle-video-revisited.github.io/">Persistent Independent Particles</a> was an inspiration for this work, and we'd like to thank Adam Harley for insightful discusisons.
@@ -343,7 +428,6 @@
     </div>
     <!-- Concurrent Work. -->
 
-  </div>
 </section>
 <!--
 

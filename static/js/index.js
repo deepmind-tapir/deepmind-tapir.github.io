@@ -19,7 +19,7 @@ function setInterpolationImage(i) {
   $('#interpolation-image-wrapper').empty().append(image);
 }
 
-
+*/
 $(document).ready(function() {
     // Check for click events on the navbar burger icon
     $(".navbar-burger").click(function() {
@@ -75,8 +75,8 @@ $(document).ready(function() {
 
     bulmaSlider.attach();
 
-})
 */
+})
 
 function set_source(idx){
   data=[
