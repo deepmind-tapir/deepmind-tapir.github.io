@@ -77,7 +77,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">TAPIR: Tracking Any Point with per-frame Initialization and temporal Refinement</h1>
+          <h2 class="title is-2 publication-title">TAPIR: Tracking Any Point with per-frame Initialization and temporal Refinement</h2>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="http://www.carldoersch.com">Carl Doersch</a><sup>1</sup>,
@@ -177,7 +177,7 @@
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
+        <h3 class="title is-3">Abstract</h3>
         <div class="content has-text-justified">
           <p>
           We present a new model for Tracking Any Point (TAP) that effectively tracks a query point in a video sequence. Our approach employs two stages: (1) a matching stage, which independently locates a suitable candidate point match for the query point on every other frame, and (2) a refinement stage, which updates both the trajectory and query features based on local correlations. The resulting model surpasses all baseline methods by a significant margin on the <a href="https://github.com/deepmind/tapnet">TAP-Vid benchmark</a>, as demonstrated by an approximate 20% absolute average Jaccard (AJ) improvement on DAVIS. Moreover, our model facilitates fast parallel inference on long video sequences. <span class="dnerf">TAPIR</span> can also run in an online fashion, tracking 256 points on a 256x256 video at roughly 40 fps, and can be flexibly extended to higher-resolution videos.
@@ -189,7 +189,7 @@
 
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <!--<h2 class="title is-3">Demo Videos</h2>-->
+        <!--<h3 class="title is-3">Demo Videos</h3>-->
         <div class="publication-video">
           <video id="teaser" autoplay muted loop playsinline height="100%">
             <source src="./static/videos/concat.mp4"
@@ -206,7 +206,7 @@
 
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Video Summary</h2>
+        <h3 class="title is-3">Video Summary</h3>
         <div class="publication-video">
           <video id="summary" playsinline controls height="100%">
             <source src="https://storage.googleapis.com/dm-tapnet/tapir_iccv_video2.mp4"
@@ -222,7 +222,7 @@
       <!-- Colab. -->
       <div class="column is-four-fifths">
         <div class="content">
-          <h2 class="title is-3">Demos</h2>
+          <h3 class="title is-3">Demos</h3>
           <p>
           TAPIR is open-source.  We provide two online Colab demos where you can try it on your own videos without installation: the first lets you <a href="https://colab.sandbox.google.com/github/deepmind/tapnet/blob/master/colabs/tapir_demo.ipynb">run our best-performing TAPIR model</a> and the second lets you <a href="https://colab.sandbox.google.com/github/deepmind/tapnet/blob/master/colabs/causal_tapir_demo.ipynb">run a model in an online fashion</a>.  Alternatively, you can <a href="https://github.com/deepmind/tapnet">clone our codebase</a> and run TAPIR live, tracking points on your own webcam; with a modern GPU, this demo can run in real time. Have fun!
           </p>
@@ -240,7 +240,7 @@
       <!-- Arch. -->
       <div class="column is-four-fifths">
         <div class="content">
-          <h2 class="title is-3">Architecture</h2>
+          <h3 class="title is-3">Architecture</h3>
           <p>
             TAPIR begins with our prior work, <a href="https://github.com/deepmind/tapnet">TAP-Net</a> to initialize a trajectory given a query point, and then uses an architecture inspired by <a href="https://particle-video-revisited.github.io/">Persistent Independent Particles</a> (PIPs) to refine the initial estimate.
           </p>
@@ -259,7 +259,7 @@
       <!-- Results. -->
       <div class="column is-four-fifths">
         <div class="content">
-          <h2 class="title is-3">TAP-Vid Performance</h2>
+          <h3 class="title is-3">TAP-Vid Performance</h3>
           <p>
             The <a href="https://github.com/deepmind/tapnet">TAP-Vid benchmark</a> is a set of real and synthetic videos annotated with point tracks.  The metric, Average Jaccard, measures both accuracy in estimating position and occlusion.  Higher is better.
           </p>
@@ -337,7 +337,7 @@
         <div class="column is-four-fifths">
           <div class="">
    
-            <h2 class="title is-3">Still Image Animation</h2>
+            <h3 class="title is-3">Still Image Animation</h3>
             <p>
             One potential application of point tracking is to improve the temporal consistency and the physical plausibility of video generation.  In this proof-of-concept, we build a pipeline which can take a still image and produce a short animated clip.  This is a two-stage pipeline, where we first have a diffusion model which produces dense tracks given the input image, and a second stage which produces a video given the input image and the trajectories.  TAPIR produces training data for both stages from otherwise unlabeled videos.  See our paper for details. <br/><br/>
             In the visualization below, we start with a single example, and generate two <i>different</i> animations from it, demonstrating that our model can understands that a single image is ambiguous.   The first column shows the input image. The second column shows a visualization of the trajectories themselves on top of the input image: purples show tracks with little motion, whereas yellows show the tracks with the most motion. The third column animates the original image according to the trajectories using standard image warping. The fourth column shows the result after filling the holes with the second diffusion model. Note that the hole filling wasn't the focus of our work; thus, unlike most concurrent work on video generation, we don't do any pre-training on images, resulting in imperfect results. We encourage you to consider whether the trajectories themselves are reasonable predictions of the future.<br/><br/>
@@ -419,7 +419,7 @@
     <!-- Concurrent Work. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3" style="margin-top: 20px">Related Links</h2>
+        <h3 class="title is-3" style="margin-top: 20px">Related Links</h3>
 
         <div class="content has-text-justified">
           <p>
@@ -447,7 +447,7 @@
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
+    <h3 class="title">BibTeX</h3>
     <pre><code>@article{park2021nerfies,
   author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
   title     = {Nerfies: Deformable Neural Radiance Fields},
